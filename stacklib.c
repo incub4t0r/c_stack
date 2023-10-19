@@ -7,8 +7,8 @@ typedef struct stack_t stack_t;
 
 stack_t *stack_create();
 node_t *stack_top(stack_t *stack);
-void node_print(node_t *node);
 void stack_print(const stack_t *stack);
+void node_print(node_t *node);
 int stack_push(stack_t *stack, const int value);
 int stack_isempty(const stack_t *stack);
 int stack_size(const stack_t *stack);
@@ -16,9 +16,9 @@ int stack_destroy(stack_t *stack);
 int stack_pop(stack_t *stack);
 
 typedef struct node_t {
-    node_t *head; // pointer to head
-    int value;  // integer value to hold
-    node_t *tail; // pointer to tail
+    node_t *head;
+    int value;
+    node_t *tail;
 } node_t;
 
 typedef struct stack_t {
@@ -26,9 +26,12 @@ typedef struct stack_t {
     size_t size;
 } stack_t;
 
-// create()
-// Create an empty stack, returns pointer
-stack_t *stack_create()
+/**
+ * @brief Allocs a new stack
+ *
+ * @return stack_t* If successful, returns the stack pointer, else NULL
+ */
+stack_t *stack_create(void)
 {
     stack_t *new_stack = malloc(sizeof(stack_t));
 
@@ -42,8 +45,12 @@ stack_t *stack_create()
     return new_stack;
 }
 
-// destroy()
-// Destroy the stack.
+/**
+ * @brief Destroys a stack
+ *
+ * @param stack A pointer to the stack
+ * @return int If successful, returns 1, else 0
+ */
 int stack_destroy(stack_t *stack)
 {
     if (!stack)
@@ -63,8 +70,12 @@ int stack_destroy(stack_t *stack)
     return 1;
 }
 
-// top()
-// Return the top of the stack but do not remove it.
+/**
+ * @brief Gets the top of the stack without removing it
+ *
+ * @param stack A pointer to the stack
+ * @return node_t* If successful, returns a node, else NULL
+ */
 node_t *stack_top(stack_t *stack)
 {
     if (!stack || stack_isempty(stack))
@@ -75,9 +86,13 @@ node_t *stack_top(stack_t *stack)
     return top;
 }
 
-
-// push(x)
-// Add value x to the top.
+/**
+ * @brief Pushes a new value onto the stack
+ *
+ * @param stack A pointer to the stack
+ * @param value An int to push to the stack
+ * @return int If successful, returns 1, else 0
+ */
 int stack_push(stack_t *stack, const int value)
 {
     node_t *new_node = malloc(sizeof(node_t));
@@ -97,9 +112,7 @@ int stack_push(stack_t *stack, const int value)
         return 1;
     }
 
-    else // it means the stack entry already exists
-    // here, the stack entry should point to the new node
-    // the previous stack entry head should point to the new node
+    else
     {
         node_t *temp_node = stack->entry;
         new_node->tail = temp_node;
@@ -110,38 +123,52 @@ int stack_push(stack_t *stack, const int value)
     return 1;
 }
 
-// pop()
-// Remove the topmost value.
+/**
+ * @brief Pops the top of the stack
+ *
+ * @param stack A pointer to the stack
+ * @return int If successful, returns 1, else 0
+ */
 int stack_pop(stack_t *stack)
 {
     if (!stack || stack_isempty(stack))
     {
         return 0;
     }
-    // remove and free the top
     node_t *top = stack->entry;
     stack->entry = top->tail;
     free(top);
     stack->size--;
-    // decrement the size
+    return 1;
 }
 
-// size()
-// Return the number of items in the stack.
+/**
+ * @brief Get the size of the stack
+ *
+ * @param stack A pointer to the stack
+ * @return int An int representing the size of the stack
+ */
 int stack_size(const stack_t *stack)
 {
     return stack->size;
 }
 
-// empty()
-// Returns a Boolean to denote if the stack is empty.
+/**
+ * @brief Check if a stack is empty
+ *
+ * @param stack A pointer to the stack
+ * @return int If empty, returns 1, else 0
+ */
 int stack_isempty(const stack_t *stack)
 {
     return (0 == stack->size);
 }
 
-// print()
-// Prints the stack
+/**
+ * @brief Prints the stack
+ *
+ * @param stack A pointer to the stack
+ */
 void stack_print(const stack_t *stack)
 {
     node_t *current = stack->entry;
@@ -152,6 +179,11 @@ void stack_print(const stack_t *stack)
     }
 }
 
+/**
+ * @brief Prints a node
+ *
+ * @param node A pointer to the node
+ */
 void node_print(node_t *node)
 {
     if (node)
